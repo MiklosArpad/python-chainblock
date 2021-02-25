@@ -1,6 +1,9 @@
 
 from datetime import datetime
 import hashlib
+from transaction import Transaction
+
+
 
 class Block:
     def __init__(self, date, transaction, prev_hash=None):
@@ -11,7 +14,7 @@ class Block:
 
     def calculate_hash(self):
         date = str(self.__date).encode()
-        transaction = self.__transaction.encode()
+        transaction = str(self.__transaction).encode()
         prev_hash = self.__prev_hash.hexdigest().encode() if self.__prev_hash else str(None).encode()
                                 # ez a python turnary if kondicio
 
@@ -31,10 +34,18 @@ class Block:
 if __name__ == "__main__":
 
     print(datetime.now())
-    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))   # strin format ebben nincs mili sec
+    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))   # string format ebben nincs mili sec
 
-    b1 = Block(datetime.now(), "Valami nagyon fals szöveget ide!") # ez a Genesis Hash
-    b2 = Block(datetime.now(), "Valami mégnagyobb fals szöveget ide!", b1.get_hash())
-    b3 = Block(datetime.now(), "Valami mégnagyobb fals szöveget ide!", b2.get_hash())
-    print()
+
+    #b1 = Block(datetime.now(), "Valami nagyon fals szöveget ide!") # ez a Genesis Hash
+    #b2 = Block(datetime.now(), "Valami mégnagyobb fals szöveget ide!", b1.get_hash())
+    #b3 = Block(datetime.now(), "Valami mégnagyobb fals szöveget ide!", b2.get_hash())
+
+    # EZ A GENESIS BLOCK
+    b1 = Block(datetime.now(), Transaction("Jozsi", "Bela", 100))
+    b2 = Block(datetime.now(), Transaction("Feri", "Teri", 25), b1.get_hash())
+    b3 = Block(datetime.now(), Transaction("Pali", "Vali", 85), b2.get_hash())
+
+    print(b1)
+    print(b2)
     print(b3)
